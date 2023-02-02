@@ -7,6 +7,8 @@ leftWrist_score = 0;
 
 rightWristX = 0;
 rightWristY = 0;
+rightWrist_score = 0;
+rightWrist_play = "";
 
 function preload()
 {
@@ -51,6 +53,18 @@ function draw()
             document.getElementById("song_name").innerHTML = "Song name = Beleiver";
         }
     }
+
+    if(rightWrist_score > 0.2)
+    {
+        circle(rightWristX,rightWristY,20);
+
+        music_1.stop();
+        if(music_2 == false)
+        {
+            music_2.play()
+            document.getElementById("song_name").innerHTML = " Song name = Daspasito";
+        }
+    }
 }
 
 function modelLoaded()
@@ -71,5 +85,7 @@ function gotPoses(results)
 
         rightWristX = results[0].pose.rightWrist.x;
         rightWristY = results[0].pose.rightWrist.y;
+        rightWrist_score = results[0].pose.keypoints[10].score;
+        console.log("Right Wrist Score = " + rightWrist_score);
     }
 }
