@@ -3,19 +3,21 @@ music_2 = "";
 
 leftWristX = 0;
 leftWristY = 0;
+leftWrist_score = 0;
 
 rightWristX = 0;
 rightWristY = 0;
 
 function preload()
 {
-    music_1 = loadSound("Music_1");
-    music_2 = loadSound("Music_2");
+    music_1 = loadSound("Music_1.mp3");
+    music_2 = loadSound("Music_2.mp3");
+
 }
 
 function setup()
 {
-    canvas = createCanvas(600,500);
+    canvas = createCanvas(400,300);
     canvas.center();
 
     video = createCapture(VIDEO);
@@ -27,7 +29,28 @@ function setup()
 
 function draw()
 {
-    image(video,0,0,600,500);
+    image(video,0,0,400,300);
+
+    fill('red');
+    stroke('red');
+
+    music_1_song = music_1.isPlaying();
+    console.log(music_1_song);
+
+    if(leftWrist_score > 0.2)
+    {
+        circle(leftWristX,leftWristY,20);
+
+        music_2.stop();
+        if(music_1 == false)
+        {
+            music_1.play()
+            music_1.setVolume(1);
+        }
+        else{
+            document.getElementById("song_name").innerHTML = "Song name = Beleiver";
+        }
+    }
 }
 
 function modelLoaded()
@@ -37,12 +60,14 @@ function modelLoaded()
 
 function gotPoses(results)
 {
-    if(results.lenght > 0)
+    if(results.length > 0)
     {
         console.log(results);
 
         leftWristX = results[0].pose.leftWrist.x;
         leftWristY = results[0].pose.leftWrist.y;
+        leftWrist_score = results[0].pose.keypoints[9].score;
+        console.log("Left Wrist Score = " + leftWrist_score);
 
         rightWristX = results[0].pose.rightWrist.x;
         rightWristY = results[0].pose.rightWrist.y;
